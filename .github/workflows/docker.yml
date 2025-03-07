@@ -22,6 +22,7 @@ on:
 
 env:
   IMAGE_NAME: atlantis-prime-pipeline
+  IMAGE_REPO: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/dataplatform/compass/atlantis-prime-pipeline
 
 jobs:
   test:
@@ -59,3 +60,25 @@ jobs:
           image: localbuild/testimage:latest
           artifact-name: sbom.spdx
         if: github.event_name == 'release'
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image locally
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile --tag ${{ env.IMAGE_REPO }}:latest
+          fi
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      - run: |
+          aws ecr get-login-password --region eu-central-1  | docker login 579478677147.dkr.ecr.eu-central-1.amazonaws.com --username AWS --password-stdin
+      - run: |
+          docker push ${{ env.IMAGE_REPO }}:latest
