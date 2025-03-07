@@ -6,7 +6,7 @@ FROM dfdsdk/prime-pipeline:2.1.2
 
 # Dependencies for entrypoint script from atlantis base
 RUN apt-get update \
-    && apt-get install -y dumb-init gosu wget \
+    && apt-get install -y dumb-init gosu \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -44,9 +44,7 @@ RUN useradd -u 200 --create-home --user-group --shell /bin/bash atlantis && \
 
 ENV TERRAGRUNT_ATLANTIS_CONFIG_VERSION=1.20.0
 
-RUN wget https://github.com/transcend-io/terragrunt-atlantis-config/releases/download/v${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}/terragrunt-atlantis-config_${terragrunt_atlantis_config_version}_linux_amd64.tar.gz \
-    && sudo tar xf terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64.tar.gz \
-    && sudo mv terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64/terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64 terragrunt-atlantis-config \
+RUN curl -s -Lo terragrunt-atlantis-config https://github.com/transcend-io/terragrunt-atlantis-config/releases/download/v${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}/terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64 \
     && sudo install terragrunt-atlantis-config /usr/local/bin
 
 # ========================================
