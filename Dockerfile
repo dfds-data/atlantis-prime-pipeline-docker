@@ -6,7 +6,7 @@ FROM dfdsdk/prime-pipeline:2.1.2
 
 # Dependencies for entrypoint script from atlantis base
 RUN apt-get update \
-    && apt-get install -y dumb-init gosu \
+    && apt-get install -y dumb-init gosu wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
