@@ -37,6 +37,18 @@ RUN useradd -u 200 --create-home --user-group --shell /bin/bash atlantis && \
     chown atlantis:root /home/atlantis/ && \
     chmod u+rwx /home/atlantis/
 
+
+# ========================================
+# Terragrunt-Atlantis-Config https://github.com/transcend-io/terragrunt-atlantis-config/releases
+# ========================================
+
+ENV TERRAGRUNT_ATLANTIS_CONFIG_VERSION=1.20.0
+
+RUN wget https://github.com/transcend-io/terragrunt-atlantis-config/releases/download/v${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}/terragrunt-atlantis-config_${terragrunt_atlantis_config_version}_linux_amd64.tar.gz \
+    && sudo tar xf terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64.tar.gz \
+    && sudo mv terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64/terragrunt-atlantis-config_${TERRAGRUNT_ATLANTIS_CONFIG_VERSION}_linux_amd64 terragrunt-atlantis-config \
+    && sudo install terragrunt-atlantis-config /usr/local/bin
+
 # ========================================
 # END
 # ========================================
