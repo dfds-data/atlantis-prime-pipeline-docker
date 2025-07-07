@@ -1,4 +1,4 @@
-FROM dfdsdk/prime-pipeline:2.1.2
+FROM dfdsdk/prime-pipeline:2.2.0
 
 # ========================================
 # Atlantis https://github.com/runatlantis/atlantis/releases
@@ -10,8 +10,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Finally actually atlantis
-ENV ATLANTIS_VERSION=0.32.0
+# ========================================
+# https://github.com/runatlantis/atlantis/releases
+# ========================================
+ENV ATLANTIS_VERSION=0.34.0
 
 RUN export BUILD_ARCHITECTURE=$(uname -m); \
     if [ "$BUILD_ARCHITECTURE" = "x86_64" ]; then export BUILD_ARCHITECTURE_ARCH=amd64; fi; \
@@ -26,11 +28,10 @@ RUN export BUILD_ARCHITECTURE=$(uname -m); \
 
 # Fetch the entrypoint script from source
 RUN curl -sSLO https://github.com/runatlantis/atlantis/archive/v${ATLANTIS_VERSION}.zip \
-    && unzip v${ATLANTIS_VERSION}.zip \
-    && rm v${ATLANTIS_VERSION}.zip \
-    && mv atlantis-${ATLANTIS_VERSION}/docker-entrypoint.sh /usr/local/bin/ \
+    && unzip -j v${ATLANTIS_VERSION}.zip atlantis-${ATLANTIS_VERSION}/docker-entrypoint.sh -d /usr/local/bin \
     && chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && rm -rf atlantis-${ATLANTIS_VERSION}
+    && rm -f v${ATLANTIS_VERSION}.zip
+
 
 # Create home dir and assign permissions
 RUN useradd -u 200 --create-home --user-group --shell /bin/bash atlantis && \
