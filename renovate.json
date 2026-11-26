@@ -1,38 +1,6 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "branchPrefix": "feature/renovate/",
-    "packageRules": [
-        {
-            "matchUpdateTypes": [
-                "pin",
-                "digest",
-                "patch",
-                "lockFileMaintenance"
-            ],
-            "minimumReleaseAge": "1 day",
-            "automerge": true,
-            "matchCurrentVersion": "!/^0/",
-            "ignoreTests": true,
-            "dependencyDashboardApproval": false
-        },
-        {
-            "matchUpdateTypes": [
-                "minor"
-            ],
-            "minimumReleaseAge": "7 days",
-            "automerge": true,
-            "matchCurrentVersion": "!/^0/",
-            "ignoreTests": true,
-            "dependencyDashboardApproval": false
-        },
-        {
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "minimumReleaseAge": "14 days",
-            "automerge": false,
-            "dependencyDashboard": true,
-            "dependencyDashboardApproval": false
-        }
+    "extends": [
+        "local>dfds/renovate-config"
     ]
 }
